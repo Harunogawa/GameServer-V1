@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.stage;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.stage";
+option java_outer_classname = "StageProto";
+
+import "common/common_response.proto";
+
+message StageListRequest {
+  int64 player_id = 1;
+}
+
+message StageInfo {
+  int64 stage_id = 1;
+  string stage_name = 2;
+  int32 star_count = 3;
+  bool cleared = 4;
+  int64 best_score = 5;
+}
+
+message StageReportRequest {
+  int64 player_id = 1;
+  int64 stage_id = 2;
+  int32 star_count = 3;
+  bool cleared = 4;
+  int64 score = 5;
+}
+
+message StageReportResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  StageInfo stage = 2;
+  bool first_clear_reward = 3;
+}
+
+message StageListResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  repeated StageInfo stages = 2;
+}

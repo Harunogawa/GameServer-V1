@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.version;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.version";
+option java_outer_classname = "VersionProto";
+
+import "common/common_response.proto";
+
+message VersionCheckRequest {
+  string client_version = 1;
+  string platform = 2;
+}
+
+message VersionCheckResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  bool need_update = 2;
+  bool force_update = 3;
+  string latest_version = 4;
+  string download_url = 5;
+  string notice = 6;
+  string resource_version = 7;
+}
+
+message ResourceVersionRequest {
+  string platform = 1;
+}
+
+message ResourceVersionResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  string resource_version = 2;
+  string resource_url = 3;
+}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameServer DevTool</title>
+    <link rel="stylesheet" href="/devtool/styles.css">
+</head>
+<body>
+<main class="page-shell">
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">GameServer Local DevTool</p>
+            <h1>本地前端模拟面板</h1>
+            <p class="hero-text">
+                这个页面用于本地调试注册用户、登录账号、给角色添加装备和查看背包。
+                页面调用的是当前 Spring Boot 服务中的调试接口，内部仍然复用现有业务服务。
+            </p>
+        </div>
+        <div class="status-card">
+            <div class="status-top">
+                <span>当前会话</span>
+                <button id="refresh-session-btn" class="ghost-button" type="button">刷新</button>
+            </div>
+            <div id="session-summary" class="session-summary empty">
+                暂未登录
+            </div>
+        </div>
+    </section>
+
+    <section class="panel-grid">
+        <article class="panel">
+            <div class="panel-header">
+                <h2>注册新角色</h2>
+                <p>一键创建账号并拿到 token。</p>
+            </div>
+            <form id="register-form" class="stack-form">
+                <label>
+                    <span>用户名</span>
+                    <input id="register-username" name="username" type="text" placeholder="testuser1001" required>
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input id="register-password" name="password" type="password" placeholder="abc123456" required>
+                </label>
+                <label>
+                    <span>昵称</span>
+                    <input id="register-nickname" name="nickname" type="text" placeholder="新角色001" required>
+                </label>
+                <button class="primary-button" type="submit">注册并进入会话</button>
+            </form>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <h2>登录已有账号</h2>
+                <p>拿到 token 后可继续操作背包。</p>
+            </div>
+            <form id="login-form" class="stack-form">
+                <label>
+                    <span>用户名</span>
+                    <input id="login-username" name="username" type="text" placeholder="testuser1001" required>
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input id="login-password" name="password" type="password" placeholder="abc123456" required>
+                </label>
+                <button class="secondary-button" type="submit">登录账号</button>
+            </form>
+        </article>
+
+        <article class="panel wide">
+            <div class="panel-header">
+                <h2>添加装备 / 道具</h2>
+                <p>使用当前登录角色直接调用加背包接口。</p>
+            </div>
+            <form id="add-item-form" class="stack-form split-form">
+                <label>
+                    <span>物品 ID</span>
+                    <input id="item-id" name="itemId" type="number" placeholder="5001" required>
+                </label>
+                <label>
+                    <span>物品类型</span>
+                    <input id="item-type" name="itemType" type="number" placeholder="1" value="1" required>
+                </label>
+                <label>
+                    <span>数量</span>
+                    <input id="item-quantity" name="quantity" type="number" placeholder="1" value="1" required>
+                </label>
+                <label class="full-width">
+                    <span>扩展 JSON</span>
+                    <textarea id="item-ext-json" name="extJson" rows="4" placeholder='{"source":"devtool","slot":"weapon"}'></textarea>
+                </label>
+                <div class="button-row full-width">
+                    <button class="primary-button" type="submit">添加到当前角色背包</button>
+                    <button id="load-inventory-btn" class="ghost-button" type="button">刷新背包</button>
+                </div>
+            </form>
+        </article>
+    </section>
+
+    <section class="inventory-panel">
+        <div class="panel-header">
+            <h2>背包快照</h2>
+            <p>用于确认装备是否真正写入数据库。</p>
+        </div>
+        <div id="inventory-empty" class="inventory-empty">还没有加载背包数据</div>
+        <div id="inventory-list" class="inventory-list"></div>
+    </section>
+
+    <section class="log-panel">
+        <div class="panel-header">
+            <h2>操作日志</h2>
+            <p>最近一次请求和结果会显示在这里。</p>
+        </div>
+        <pre id="log-output" class="log-output">等待操作...</pre>
+    </section>
+</main>
+
+<script src="/devtool/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.inventory;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.inventory";
+option java_outer_classname = "InventoryProto";
+
+import "common/common_response.proto";
+
+message InventoryQueryRequest {
+  int64 player_id = 1;
+}
+
+message InventoryItem {
+  int64 item_id = 1;
+  int32 item_type = 2;
+  int64 quantity = 3;
+}
+
+message InventoryQueryResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  repeated InventoryItem items = 2;
+}
+
+message AddItemRequest {
+  int64 player_id = 1;
+  int64 item_id = 2;
+  int32 item_type = 3;
+  int64 quantity = 4;
+  string ext_json = 5;
+}
+
+message AddItemResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  InventoryItem item = 2;
+}
+
+message ConsumeItemRequest {
+  int64 player_id = 1;
+  int64 item_id = 2;
+  int64 quantity = 3;
+}
+
+message ConsumeItemResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  InventoryItem item = 2;
+}

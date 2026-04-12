@@ -1,0 +1,37 @@
+# Maven / Java build output
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+logs/
+*.log
+hs_err_pid*
+replay_pid*
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Maven wrapper cache if added later
+.mvn/wrapper/maven-wrapper.jar
+
+# Generated protobuf sources and temp files
+generated/
+
+# Local environment overrides
+.env
+.env.*
+
+# Runtime data
+*.pid
+*.seed

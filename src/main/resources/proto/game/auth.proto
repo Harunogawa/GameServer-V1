@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.auth;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.auth";
+option java_outer_classname = "AuthProto";
+
+import "common/common_response.proto";
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+  string client_version = 3;
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+  string nickname = 3;
+}
+
+message RegisterResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  int64 account_id = 2;
+  int64 player_id = 3;
+}
+
+message LoginResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  int64 account_id = 2;
+  int64 player_id = 3;
+  string token = 4;
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  bool valid = 2;
+  int64 account_id = 3;
+  int64 player_id = 4;
+}
+
+message LogoutRequest {
+  string token = 1;
+}
+
+message LogoutResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+}

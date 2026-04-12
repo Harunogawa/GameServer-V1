@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.save;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.save";
+option java_outer_classname = "SaveProto";
+
+import "common/common_response.proto";
+
+message UploadSaveRequest {
+  int64 player_id = 1;
+  int32 slot = 2;
+  string save_data_json = 3;
+  string save_version = 4;
+}
+
+message UploadSaveResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  int64 player_id = 2;
+  int32 slot = 3;
+}
+
+message PullSaveRequest {
+  int64 player_id = 1;
+  int32 slot = 2;
+}
+
+message PullSaveResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  int64 player_id = 2;
+  int32 slot = 3;
+  string save_data_json = 4;
+  string save_version = 5;
+}

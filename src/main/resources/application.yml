@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: gameserver
+  profiles:
+    active: dev
+  jackson:
+    time-zone: Asia/Shanghai
+    serialization:
+      write-dates-as-timestamps: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.unityonline.gameserver: INFO
+
+game:
+  security:
+    enabled: true
+    header-name: X-Game-Token
+    token-prefix: Bearer
+    token-ttl-seconds: 604800
+    whitelist:
+      - /actuator/health
+      - /api/public/**
+      - /api/auth/register
+      - /api/auth/login
+      - /api/auth/validate
+      - /api/notice/**
+      - /api/version/**
+      - /devtool/**
+      - /api/devtool/register
+      - /api/devtool/login
+  protobuf:
+    write-json-default-values: true

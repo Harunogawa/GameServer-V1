@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/game_server?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: zhangchen6688
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 10
+      initialization-fail-timeout: -1
+      connection-timeout: 30000
+      validation-timeout: 5000
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password:
+      database: 0
+      timeout: 3s
+
+logging:
+  level:
+    com.unityonline.gameserver: DEBUG

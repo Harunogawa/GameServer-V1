@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: gameserver-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: game_server
+      MYSQL_USER: game_user
+      MYSQL_PASSWORD: game_pass
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7.4
+    container_name: gameserver-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mysql_data:
+  redis_data:

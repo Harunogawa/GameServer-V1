@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.rank;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.rank";
+option java_outer_classname = "RankProto";
+
+import "common/common_response.proto";
+
+message RankQueryRequest {
+  int32 rank_type = 1;
+  int32 page_no = 2;
+  int32 page_size = 3;
+}
+
+message RankReportRequest {
+  int32 rank_type = 1;
+  int64 player_id = 2;
+  int64 score = 3;
+}
+
+message RankReportResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  int64 score = 2;
+  int32 rank_no = 3;
+}
+
+message RankEntry {
+  int32 rank_no = 1;
+  int64 player_id = 2;
+  string nickname = 3;
+  int64 score = 4;
+}
+
+message RankQueryResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  repeated RankEntry entries = 2;
+}
+
+message MyRankRequest {
+  int32 rank_type = 1;
+  int64 player_id = 2;
+}
+
+message MyRankResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  RankEntry entry = 2;
+}

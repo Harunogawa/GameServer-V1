@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.quest;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.quest";
+option java_outer_classname = "QuestProto";
+
+import "common/common_response.proto";
+
+message QuestListRequest {
+  int64 player_id = 1;
+}
+
+message QuestInfo {
+  int64 quest_id = 1;
+  string quest_name = 2;
+  string quest_desc = 3;
+  int32 status = 4;
+  int32 progress = 5;
+  int32 target_value = 6;
+  bool reward_claimed = 7;
+}
+
+message UpdateQuestProgressRequest {
+  int64 player_id = 1;
+  int64 quest_id = 2;
+  int32 progress_delta = 3;
+}
+
+message UpdateQuestProgressResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  QuestInfo quest = 2;
+}
+
+message ClaimQuestRewardRequest {
+  int64 player_id = 1;
+  int64 quest_id = 2;
+}
+
+message ClaimQuestRewardResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  QuestInfo quest = 2;
+}
+
+message QuestListResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  repeated QuestInfo quests = 2;
+}

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.notice;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.notice";
+option java_outer_classname = "NoticeProto";
+
+import "common/common_response.proto";
+
+message NoticeListRequest {
+}
+
+message NoticeInfo {
+  int64 notice_id = 1;
+  string title = 2;
+  string content = 3;
+  int32 priority = 4;
+  int64 start_time = 5;
+  int64 end_time = 6;
+}
+
+message NoticeListResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  repeated NoticeInfo notices = 2;
+}

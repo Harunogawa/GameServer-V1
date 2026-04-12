@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package com.unityonline.gameserver.proto.game.player;
+
+option java_multiple_files = true;
+option java_package = "com.unityonline.gameserver.proto.game.player";
+option java_outer_classname = "PlayerProto";
+
+import "common/common_response.proto";
+
+message InitPlayerRequest {
+  int64 account_id = 1;
+  string nickname = 2;
+}
+
+message InitPlayerResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  int64 player_id = 2;
+}
+
+message PlayerProfileRequest {
+  int64 player_id = 1;
+}
+
+message PlayerProfileResponse {
+  com.unityonline.gameserver.proto.common.CommonResponse result = 1;
+  int64 account_id = 2;
+  int64 player_id = 3;
+  string username = 4;
+  string nickname = 5;
+  int32 level = 6;
+  int64 exp = 7;
+  int64 gold = 8;
+  int64 diamond = 9;
+  string avatar_url = 10;
+}
