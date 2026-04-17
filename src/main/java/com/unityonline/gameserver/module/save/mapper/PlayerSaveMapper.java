@@ -39,7 +39,7 @@ public class PlayerSaveMapper {
     public int upsert(PlayerSaveEntity entity) {
         String sql = """
                 INSERT INTO t_player_save(player_id, save_slot, save_version, save_data_json)
-                VALUES (?, ?, ?, CAST(? AS JSON))
+                VALUES (?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     save_version = VALUES(save_version),
                     save_data_json = VALUES(save_data_json)

@@ -52,7 +52,7 @@ public class PlayerInventoryMapper {
     public int upsert(PlayerInventoryEntity entity) {
         String sql = """
                 INSERT INTO t_player_inventory(player_id, item_id, item_type, quantity, ext_json)
-                VALUES (?, ?, ?, ?, CAST(? AS JSON))
+                VALUES (?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     item_type = VALUES(item_type),
                     quantity = VALUES(quantity),

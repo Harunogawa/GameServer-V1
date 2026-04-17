@@ -1,0 +1,18 @@
+[
+  {
+    "stage_id": 10001,
+    "stage_name": "stage_1_1",
+    "reward_item_id": 3001,
+    "reward_item_type": 1,
+    "reward_quantity": 10,
+    "status": 1
+  },
+  {
+    "stage_id": 10002,
+    "stage_name": "stage_1_2",
+    "reward_item_id": 3001,
+    "reward_item_type": 1,
+    "reward_quantity": 15,
+    "status": 1
+  }
+]

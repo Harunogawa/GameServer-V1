@@ -35,3 +35,5 @@ generated/
 # Runtime data
 *.pid
 *.seed
+luban/output/
+%TEMP%/

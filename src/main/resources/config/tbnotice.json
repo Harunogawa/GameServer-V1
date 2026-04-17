@@ -1,0 +1,11 @@
+[
+  {
+    "notice_id": 1,
+    "title": "welcome_notice",
+    "content": "welcome_to_gameserver_demo",
+    "priority": 100,
+    "status": 1,
+    "start_time": 1767196800,
+    "end_time": 1798732800
+  }
+]

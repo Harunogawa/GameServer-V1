@@ -6,6 +6,9 @@
     --muted: #65706f;
     --accent: #cc5a2f;
     --accent-strong: #a93f19;
+    --secondary: #2d6c69;
+    --secondary-strong: #1d4d4a;
+    --danger: #a23b2f;
     --line: rgba(31, 42, 43, 0.12);
     --shadow: 0 20px 60px rgba(65, 54, 33, 0.15);
     --radius: 24px;
@@ -27,15 +30,14 @@ body {
 }
 
 .page-shell {
-    width: min(1200px, calc(100% - 32px));
-    margin: 28px auto 40px;
+    width: min(1360px, calc(100% - 28px));
+    margin: 20px auto 40px;
     display: grid;
     gap: 20px;
 }
 
 .hero,
 .panel,
-.inventory-panel,
 .log-panel {
     background: var(--panel);
     border: 1px solid var(--line);
@@ -49,6 +51,13 @@ body {
     grid-template-columns: 1.5fr 1fr;
     gap: 20px;
     padding: 28px;
+}
+
+.hero-topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
 }
 
 .eyebrow {
@@ -94,6 +103,48 @@ body {
     gap: 12px;
 }
 
+.button-row.compact {
+    justify-content: flex-end;
+}
+
+.button-row.align-end {
+    align-items: end;
+}
+
+.button-row.wrap-row {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.flash-banner {
+    padding: 14px 18px;
+    border-radius: 18px;
+    border: 1px solid transparent;
+    font-weight: 600;
+}
+
+.flash-banner.hidden {
+    display: none;
+}
+
+.flash-banner.info {
+    background: rgba(45, 108, 105, 0.12);
+    border-color: rgba(45, 108, 105, 0.2);
+    color: var(--secondary-strong);
+}
+
+.flash-banner.success {
+    background: rgba(62, 138, 87, 0.12);
+    border-color: rgba(62, 138, 87, 0.2);
+    color: #2a6a3f;
+}
+
+.flash-banner.error {
+    background: rgba(162, 59, 47, 0.12);
+    border-color: rgba(162, 59, 47, 0.24);
+    color: var(--danger);
+}
+
 .session-summary {
     margin-top: 14px;
     border-radius: 18px;
@@ -106,23 +157,42 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--muted);
+}
+
+.token-code {
+    display: block;
+    margin-top: 8px;
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 
 .panel-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
+.panel-grid.two-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .panel,
-.inventory-panel,
 .log-panel {
     padding: 22px;
 }
 
 .panel.wide {
     grid-column: 1 / -1;
+}
+
+.quick-panel {
+    padding: 22px;
+}
+
+.quick-grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
 }
 
 .stack-form {
@@ -135,6 +205,11 @@ body {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.inline-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+}
+
 .full-width {
     grid-column: 1 / -1;
 }
@@ -144,6 +219,16 @@ label {
     gap: 8px;
     font-size: 14px;
     font-weight: 600;
+}
+
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-field input {
+    width: auto;
 }
 
 input,
@@ -184,7 +269,7 @@ button:hover {
 }
 
 .secondary-button {
-    background: linear-gradient(135deg, #2d6c69, #1d4d4a);
+    background: linear-gradient(135deg, var(--secondary), var(--secondary-strong));
     color: #f5fffd;
     box-shadow: 0 10px 24px rgba(29, 77, 74, 0.24);
 }
@@ -192,6 +277,10 @@ button:hover {
 .ghost-button {
     background: rgba(31, 42, 43, 0.06);
     color: var(--ink);
+}
+
+.ghost-button.danger {
+    color: var(--danger);
 }
 
 .inventory-list {
@@ -222,28 +311,46 @@ button:hover {
     word-break: break-word;
 }
 
+.data-output,
 .log-output {
     margin: 16px 0 0;
     padding: 16px;
     border-radius: 18px;
-    min-height: 180px;
-    background: #1d2528;
-    color: #dff7f2;
     overflow: auto;
     font-family: "SFMono-Regular", "Menlo", "Monaco", monospace;
     font-size: 13px;
     line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
-@media (max-width: 920px) {
+.data-output {
+    min-height: 180px;
+    background: rgba(28, 35, 37, 0.95);
+    color: #edf7f5;
+}
+
+.log-output {
+    min-height: 220px;
+    background: #1d2528;
+    color: #dff7f2;
+}
+
+@media (max-width: 1080px) {
     .hero,
-    .panel-grid,
-    .split-form {
+    .panel-grid.two-columns,
+    .split-form,
+    .inline-form,
+    .quick-grid {
         grid-template-columns: 1fr;
     }
 
     .page-shell {
-        width: min(100% - 18px, 1200px);
+        width: min(100% - 18px, 1360px);
         margin-top: 18px;
+    }
+
+    .hero-topbar {
+        flex-direction: column;
     }
 }

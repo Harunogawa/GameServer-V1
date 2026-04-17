@@ -1,0 +1,24 @@
+[
+  {
+    "quest_id": 1001,
+    "quest_name": "first_clear",
+    "quest_desc": "clear_any_stage_once",
+    "quest_type": 1,
+    "target_value": 1,
+    "reward_item_id": 2001,
+    "reward_item_type": 1,
+    "reward_quantity": 100,
+    "status": 1
+  },
+  {
+    "quest_id": 1002,
+    "quest_name": "total_star",
+    "quest_desc": "get_6_stars",
+    "quest_type": 2,
+    "target_value": 6,
+    "reward_item_id": 2002,
+    "reward_item_type": 1,
+    "reward_quantity": 50,
+    "status": 1
+  }
+]

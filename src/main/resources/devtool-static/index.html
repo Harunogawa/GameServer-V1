@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameServer DevTool</title>
+    <link rel="stylesheet" href="/devtool/styles.css">
+</head>
+<body>
+<main class="page-shell">
+    <section class="hero">
+        <div class="hero-copy">
+            <div class="hero-topbar">
+                <div>
+                    <p class="eyebrow" data-i18n="hero.eyebrow">GameServer Local DevTool</p>
+                    <h1 data-i18n="hero.title">Web Debug Console</h1>
+                </div>
+                <button id="language-toggle-btn" class="ghost-button" type="button" data-i18n="language.toggle">Language</button>
+            </div>
+            <p class="hero-text" data-i18n="hero.text">
+                This page calls JSON debug endpoints from the current Spring Boot service and covers auth, player,
+                save, inventory, quest, stage, notice, version, rank, and overview flows.
+            </p>
+        </div>
+        <div class="status-card">
+            <div class="status-top">
+                <span data-i18n="session.current">Current Session</span>
+                <div class="button-row compact">
+                    <button id="refresh-session-btn" class="ghost-button" type="button" data-i18n="session.refresh">Refresh</button>
+                    <button id="logout-btn" class="ghost-button danger" type="button" data-i18n="session.logout">Logout</button>
+                </div>
+            </div>
+            <div id="session-summary" class="session-summary empty" data-i18n="session.notLoggedIn">Not logged in</div>
+        </div>
+    </section>
+
+    <div id="flash-banner" class="flash-banner hidden"></div>
+
+    <section class="panel quick-panel">
+        <div class="panel-header">
+            <h2 data-i18n="quick.title">Quick Actions</h2>
+            <p data-i18n="quick.desc">Use presets to avoid typing JSON and clicking endpoints one by one.</p>
+        </div>
+        <div class="quick-grid">
+            <button id="quick-fill-account-btn" class="ghost-button" type="button" data-i18n="quick.fillAccount">Fill Random Account</button>
+            <button id="quick-register-account-btn" class="primary-button" type="button" data-i18n="quick.registerAndLogin">Register Demo Account</button>
+            <button id="quick-batch-accounts-btn" class="secondary-button" type="button" data-i18n="quick.batchAccounts">Create 3 Test Accounts</button>
+            <button id="quick-bootstrap-btn" class="primary-button" type="button" data-i18n="quick.bootstrap">Prepare Current Account</button>
+            <button id="quick-refresh-all-btn" class="ghost-button" type="button" data-i18n="quick.refreshAll">Refresh All Panels</button>
+            <button id="quick-rank-bots-btn" class="secondary-button" type="button" data-i18n="quick.rankBots">Create 5 Rank Bots</button>
+        </div>
+    </section>
+
+    <section class="panel-grid two-columns">
+        <article class="panel">
+            <div class="panel-header">
+                <h2>Auth</h2>
+                <p data-i18n="auth.desc">Register, login, validate token.</p>
+            </div>
+            <form id="register-form" class="stack-form">
+                <label>
+                    <span data-i18n="field.username">Username</span>
+                    <input name="username" type="text" placeholder="testuser1001" data-i18n-placeholder="placeholder.username" required>
+                </label>
+                <label>
+                    <span data-i18n="field.password">Password</span>
+                    <input name="password" type="password" placeholder="abc123456" data-i18n-placeholder="placeholder.password" required>
+                </label>
+                <label>
+                    <span data-i18n="field.nickname">Nickname</span>
+                    <input name="nickname" type="text" placeholder="hero_01" data-i18n-placeholder="placeholder.nickname" required>
+                </label>
+                <div class="button-row wrap-row">
+                    <button class="primary-button" type="submit" data-i18n="auth.registerAndLogin">Register + Login</button>
+                    <button id="auth-fill-random-btn" class="ghost-button" type="button" data-i18n="auth.fillRandom">Fill Random</button>
+                    <button id="auth-create-three-btn" class="secondary-button" type="button" data-i18n="auth.createThree">Create 3 Accounts</button>
+                </div>
+            </form>
+            <form id="login-form" class="stack-form">
+                <label>
+                    <span data-i18n="field.username">Username</span>
+                    <input name="username" type="text" placeholder="testuser1001" data-i18n-placeholder="placeholder.username" required>
+                </label>
+                <label>
+                    <span data-i18n="field.password">Password</span>
+                    <input name="password" type="password" placeholder="abc123456" data-i18n-placeholder="placeholder.password" required>
+                </label>
+                <div class="button-row wrap-row">
+                    <button class="secondary-button" type="submit" data-i18n="auth.login">Login</button>
+                    <button id="validate-token-btn" class="ghost-button" type="button" data-i18n="auth.validateToken">Validate Token</button>
+                </div>
+            </form>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <h2>Player</h2>
+                <p data-i18n="player.desc">Load current profile and quick overview.</p>
+            </div>
+            <div class="button-row wrap-row">
+                <button id="load-profile-btn" class="primary-button" type="button" data-i18n="player.loadProfile">Load Profile</button>
+                <button id="load-overview-btn" class="ghost-button" type="button" data-i18n="player.loadOverview">Load Overview</button>
+                <button id="player-bootstrap-btn" class="secondary-button" type="button" data-i18n="player.bootstrap">Bootstrap Current Player</button>
+            </div>
+            <pre id="profile-output" class="data-output" data-i18n="common.waiting">Waiting...</pre>
+        </article>
+
+        <article class="panel wide">
+            <div class="panel-header">
+                <h2>Save</h2>
+                <p data-i18n="save.desc">Upload and pull save data. Default slot is 1.</p>
+            </div>
+            <form id="save-upload-form" class="stack-form split-form">
+                <label>
+                    <span data-i18n="field.slot">Slot</span>
+                    <input name="slot" type="number" value="1" min="1" required>
+                </label>
+                <label>
+                    <span data-i18n="field.saveVersion">Save Version</span>
+                    <input name="saveVersion" type="text" value="1.0.0-dev" required>
+                </label>
+                <div class="button-row align-end">
+                    <button class="primary-button" type="submit" data-i18n="save.upload">Upload Save</button>
+                </div>
+                <label class="full-width">
+                    <span data-i18n="field.saveJson">Save JSON</span>
+                    <textarea name="saveDataJson" rows="7" placeholder='{"stage":10001,"hp":88,"items":[1001,1002]}' data-i18n-placeholder="placeholder.saveJson" required></textarea>
+                </label>
+            </form>
+            <div class="button-row wrap-row">
+                <button id="fill-default-save-btn" class="ghost-button" type="button" data-i18n="save.fillDefault">Fill Default Save</button>
+                <button id="upload-default-save-btn" class="secondary-button" type="button" data-i18n="save.uploadDefault">Upload Default Save</button>
+                <button id="upload-advanced-save-btn" class="ghost-button" type="button" data-i18n="save.uploadAdvanced">Upload Advanced Save</button>
+                <button id="save-pull-btn" class="ghost-button" type="button" data-i18n="save.pull">Pull Save</button>
+            </div>
+            <pre id="save-output" class="data-output" data-i18n="common.waiting">Waiting...</pre>
+        </article>
+
+        <article class="panel wide">
+            <div class="panel-header">
+                <h2>Inventory</h2>
+                <p data-i18n="inventory.desc">List, add, and consume items.</p>
+            </div>
+            <form id="add-item-form" class="stack-form split-form">
+                <label>
+                    <span data-i18n="field.itemId">Item ID</span>
+                    <input name="itemId" type="number" value="5001" required>
+                </label>
+                <label>
+                    <span data-i18n="field.itemType">Item Type</span>
+                    <input name="itemType" type="number" value="1" required>
+                </label>
+                <label>
+                    <span data-i18n="field.quantity">Quantity</span>
+                    <input name="quantity" type="number" value="10" required>
+                </label>
+                <label class="full-width">
+                    <span data-i18n="field.extJson">Extra JSON</span>
+                    <textarea name="extJson" rows="3" placeholder='{"source":"devtool","slot":"weapon"}' data-i18n-placeholder="placeholder.extJson"></textarea>
+                </label>
+                <div class="button-row full-width wrap-row">
+                    <button class="primary-button" type="submit" data-i18n="inventory.addItem">Add Item</button>
+                    <button id="grant-starter-pack-btn" class="secondary-button" type="button" data-i18n="inventory.grantStarter">Grant Starter Pack</button>
+                    <button id="grant-resource-pack-btn" class="ghost-button" type="button" data-i18n="inventory.grantResource">Grant Resource Pack</button>
+                    <button id="load-inventory-btn" class="ghost-button" type="button" data-i18n="inventory.refresh">Refresh Inventory</button>
+                </div>
+            </form>
+            <form id="consume-item-form" class="stack-form inline-form">
+                <label>
+                    <span data-i18n="field.itemId">Item ID</span>
+                    <input name="itemId" type="number" value="5001" required>
+                </label>
+                <label>
+                    <span data-i18n="field.consumeQty">Consume Qty</span>
+                    <input name="quantity" type="number" value="1" required>
+                </label>
+                <button class="secondary-button" type="submit" data-i18n="inventory.consumeItem">Consume Item</button>
+            </form>
+            <div id="inventory-empty" class="inventory-empty" data-i18n="inventory.notLoaded">Inventory not loaded yet.</div>
+            <div id="inventory-list" class="inventory-list"></div>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <h2>Quest</h2>
+                <p data-i18n="quest.desc">List quests, update progress, claim reward.</p>
+            </div>
+            <div class="button-row wrap-row">
+                <button id="load-quests-btn" class="primary-button" type="button" data-i18n="quest.refresh">Refresh Quests</button>
+                <button id="complete-all-quests-btn" class="secondary-button" type="button" data-i18n="quest.completeAll">Complete All</button>
+                <button id="claim-all-quests-btn" class="ghost-button" type="button" data-i18n="quest.claimAll">Claim All Rewards</button>
+            </div>
+            <form id="quest-progress-form" class="stack-form inline-form">
+                <label>
+                    <span data-i18n="field.questId">Quest ID</span>
+                    <input name="questId" type="number" value="1001" required>
+                </label>
+                <label>
+                    <span data-i18n="field.progressDelta">Progress Delta</span>
+                    <input name="progressDelta" type="number" value="1" required>
+                </label>
+                <button class="secondary-button" type="submit" data-i18n="quest.updateProgress">Update Progress</button>
+            </form>
+            <form id="quest-claim-form" class="stack-form inline-form">
+                <label>
+                    <span data-i18n="field.questId">Quest ID</span>
+                    <input name="questId" type="number" value="1001" required>
+                </label>
+                <button class="ghost-button" type="submit" data-i18n="quest.claimReward">Claim Reward</button>
+            </form>
+            <pre id="quest-output" class="data-output" data-i18n="common.waiting">Waiting...</pre>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <h2>Stage</h2>
+                <p data-i18n="stage.desc">List stages and submit stage report.</p>
+            </div>
+            <div class="button-row wrap-row">
+                <button id="load-stages-btn" class="primary-button" type="button" data-i18n="stage.refresh">Refresh Stages</button>
+                <button id="clear-stage-1-btn" class="secondary-button" type="button" data-i18n="stage.clearOne">Clear 10001</button>
+                <button id="clear-stage-batch-btn" class="ghost-button" type="button" data-i18n="stage.clearBatch">Clear First 2 Stages</button>
+            </div>
+            <form id="stage-report-form" class="stack-form split-form">
+                <label>
+                    <span data-i18n="field.stageId">Stage ID</span>
+                    <input name="stageId" type="number" value="10001" required>
+                </label>
+                <label>
+                    <span data-i18n="field.starCount">Star Count</span>
+                    <input name="starCount" type="number" value="3" required>
+                </label>
+                <label>
+                    <span data-i18n="field.score">Score</span>
+                    <input name="score" type="number" value="9999" required>
+                </label>
+                <label class="checkbox-field full-width">
+                    <input name="cleared" type="checkbox" checked>
+                    <span data-i18n="field.cleared">Cleared</span>
+                </label>
+                <button class="secondary-button full-width" type="submit" data-i18n="stage.submitReport">Submit Report</button>
+            </form>
+            <pre id="stage-output" class="data-output" data-i18n="common.waiting">Waiting...</pre>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <h2>Notice</h2>
+                <p data-i18n="notice.desc">Load current notices.</p>
+            </div>
+            <div class="button-row">
+                <button id="load-notices-btn" class="primary-button" type="button" data-i18n="notice.load">Load Notices</button>
+            </div>
+            <pre id="notice-output" class="data-output" data-i18n="common.waiting">Waiting...</pre>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <h2>Version</h2>
+                <p data-i18n="version.desc">Load client version and resource version.</p>
+            </div>
+            <form id="version-form" class="stack-form inline-form">
+                <label>
+                    <span data-i18n="field.platform">Platform</span>
+                    <input name="platform" type="text" value="all">
+                </label>
+                <button id="load-client-version-btn" class="primary-button" type="button" data-i18n="version.client">Client Version</button>
+                <button id="load-resource-version-btn" class="ghost-button" type="button" data-i18n="version.resource">Resource Version</button>
+            </form>
+            <pre id="version-output" class="data-output" data-i18n="common.waiting">Waiting...</pre>
+        </article>
+
+        <article class="panel wide">
+            <div class="panel-header">
+                <h2>Rank</h2>
+                <p data-i18n="rank.desc">Report score, query rank list, query my rank.</p>
+            </div>
+            <div class="button-row wrap-row">
+                <button id="report-starter-score-btn" class="secondary-button" type="button" data-i18n="rank.reportStarter">Report 12345</button>
+                <button id="report-high-score-btn" class="ghost-button" type="button" data-i18n="rank.reportHigh">Report 88888</button>
+                <button id="seed-rank-bots-btn" class="primary-button" type="button" data-i18n="rank.seedBots">Seed 5 Bots</button>
+            </div>
+            <form id="rank-report-form" class="stack-form inline-form">
+                <label>
+                    <span data-i18n="field.rankType">Rank Type</span>
+                    <input name="rankType" type="number" value="1" required>
+                </label>
+                <label>
+                    <span data-i18n="field.score">Score</span>
+                    <input name="score" type="number" value="12345" required>
+                </label>
+                <button class="primary-button" type="submit" data-i18n="rank.reportScore">Report Score</button>
+            </form>
+            <form id="rank-query-form" class="stack-form split-form">
+                <label>
+                    <span data-i18n="field.rankType">Rank Type</span>
+                    <input name="rankType" type="number" value="1" required>
+                </label>
+                <label>
+                    <span data-i18n="field.pageNo">Page No</span>
+                    <input name="pageNo" type="number" value="1" required>
+                </label>
+                <label>
+                    <span data-i18n="field.pageSize">Page Size</span>
+                    <input name="pageSize" type="number" value="10" required>
+                </label>
+                <div class="button-row full-width wrap-row">
+                    <button id="rank-list-btn" class="secondary-button" type="button" data-i18n="rank.list">Rank List</button>
+                    <button id="rank-my-btn" class="ghost-button" type="button" data-i18n="rank.myRank">My Rank</button>
+                </div>
+            </form>
+            <pre id="rank-output" class="data-output" data-i18n="common.waiting">Waiting...</pre>
+        </article>
+    </section>
+
+    <section class="log-panel">
+        <div class="panel-header">
+            <h2>Log</h2>
+            <p data-i18n="log.desc">Latest request and response snapshots appear here.</p>
+        </div>
+        <pre id="log-output" class="log-output" data-i18n="log.waiting">Waiting for action...</pre>
+    </section>
+</main>
+
+<script src="/devtool/app.js"></script>
+</body>
+</html>
